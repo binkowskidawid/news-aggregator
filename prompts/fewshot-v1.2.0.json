@@ -1,0 +1,50 @@
+[
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Tragiczny wypadek na Węgrzech. Wojewoda przekazała nowe informacje\nLEAD: 21 osób wczoraj przyleciało do Polski. Pięć z nich zostało przewiezionych do szpitali — poinformowała wojewoda podkarpacka.\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"inne\", \"category_confidence\": 0.86, \"overall_assessment\": \"neutral\", \"findings\": []}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Wypadek autokaru na Węgrzech. Adwokat o kierowcy: Jest w stanie szoku\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"inne\", \"category_confidence\": 0.82, \"overall_assessment\": \"neutral\", \"findings\": []}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Toruń: jaka pogoda czeka nas 18.08.2026?\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"inne\", \"category_confidence\": 0.79, \"overall_assessment\": \"neutral\", \"findings\": []}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: 30 proc. więcej agresji wobec Ukraińców. Jest apel ambasadora\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"geopolityka\", \"category_confidence\": 0.81, \"overall_assessment\": \"mildly_loaded\", \"findings\": [{\"type\": \"unsourced_figure\", \"quote\": \"30 proc. więcej agresji wobec Ukraińców\", \"neutral_alternative\": \"wzrost liczby zgłoszeń o agresji wobec Ukraińców według danych podanych przez ambasadę za wskazany okres\", \"explanation\": \"Procent bez źródła, bazy porównawczej i okresu, do którego się odnosi.\", \"confidence\": 0.83}]}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Bajońska umowa Pentagonu. Armia USA wyda miliardy na jeden pocisk\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"geopolityka\", \"category_confidence\": 0.84, \"overall_assessment\": \"mildly_loaded\", \"findings\": [{\"type\": \"emotional_load\", \"quote\": \"Bajońska umowa Pentagonu\", \"neutral_alternative\": \"kosztowna umowa Pentagonu\", \"explanation\": \"Hiperbola oceniająca wartość kontraktu; dostępny neutralny odpowiednik nie zawiera oceny.\", \"confidence\": 0.85}, {\"type\": \"unsourced_figure\", \"quote\": \"wyda miliardy na jeden pocisk\", \"neutral_alternative\": \"wyda podaną w umowie kwotę na pocisk wskazanego typu\", \"explanation\": \"Wielkość bez kwoty, okresu i źródła.\", \"confidence\": 0.78}]}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Berek w TK jak Pawłowicz? Nie da się tego porównać\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"polityka\", \"category_confidence\": 0.88, \"overall_assessment\": \"mildly_loaded\", \"findings\": [{\"type\": \"loaded_question\", \"quote\": \"Berek w TK jak Pawłowicz?\", \"neutral_alternative\": \"Jak oceniana jest kandydatura Berka do Trybunału Konstytucyjnego?\", \"explanation\": \"Pytanie zakłada zestawienie obu nominacji jako oczywiste, choć samo tego nie wykazuje.\", \"confidence\": 0.76}]}"
+  }
+]

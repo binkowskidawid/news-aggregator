@@ -1,0 +1,60 @@
+name: Source proposal
+description: A publisher worth supporting, or a source whose feed stopped working.
+labels: ["source"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **No source ships enabled, and none ever will.** Adding one here means the code can
+        fetch it if an operator chooses to; it is not a recommendation to collect from it, and
+        the duties that attach to collecting stay with whoever turns it on. Read
+        [COMPLIANCE.md](../../COMPLIANCE.md) first.
+
+  - type: input
+    id: name
+    attributes:
+      label: Publisher
+    validations:
+      required: true
+
+  - type: input
+    id: feed
+    attributes:
+      label: Feed or listing address
+      description: An RSS or Atom feed if one exists — that is tier 1 and costs one request.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      description: >
+        Anything other than Polish needs its own prompt file and its own annotated set. A
+        translated string is not support, and the interface must not imply quality nobody has
+        measured.
+      options:
+        - Polish
+        - Other — and I understand it needs its own prompt and its own measurement
+    validations:
+      required: true
+
+  - type: textarea
+    id: tdm
+    attributes:
+      label: What the publisher's robots.txt and terms say about text and data mining
+      description: >
+        Quote the relevant lines. A reservation under `art. 26³` of the Polish copyright act
+        (or Article 4 of Directive 2019/790 elsewhere) is stored as data on the source row and
+        shown by `make sources`; it does not stop the code, it informs the operator.
+    validations:
+      required: true
+
+  - type: textarea
+    id: lead
+    attributes:
+      label: Does the feed carry a lead, or only headlines?
+      description: >
+        It matters for comparison, not just for completeness: technique density per unit of
+        text is not comparable between a portal that exposes a lead and one that does not, and
+        `articles.fetch_level` records which happened.

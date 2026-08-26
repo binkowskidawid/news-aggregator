@@ -1,0 +1,136 @@
+# Compose profiles keep this file complete while only starting what is currently needed.
+#
+#   docker compose up -d                      postgres only — enough for the evaluation gate
+#   docker compose --profile pipeline up -d   + ingest and analyzer, the unattended loop
+#   docker compose --profile scrape up -d     + crawl4ai, for JS-rendered or bot-walled portals
+#   docker compose --profile server up -d     + ollama, for the deployment server ONLY
+#   docker compose --profile full up -d       + api and web, which do not exist yet
+#
+# `pipeline` exists separately from `full` because `full` also starts api and web, whose
+# source is still to be written: they would sit in a restart loop.
+#
+# Ollama is deliberately absent from the default set. During local development it runs
+# natively on the host: Docker Desktop on macOS caps the VM's memory far below the host's
+# and passes no GPU through, so larger quantisations neither fit nor reach Metal.
+
+services:
+  postgres:
+    # 18 is required: the schema uses uuidv7() for time-ordered primary keys.
+    image: postgres:18-trixie
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      # Postgres 18+ images want the mount at /var/lib/postgresql, not .../data: the
+      # entrypoint creates a major-version subdirectory beneath it so pg_upgrade --link
+      # can work without crossing a mount boundary. Mounting .../data aborts on startup.
+      - postgres_data:/var/lib/postgresql
+      - ./migrations:/migrations:ro
+    ports:
+      # Loopback only — never expose the database to the LAN. The host port is
+      # configurable because 5432 is routinely taken by another local stack.
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  crawl4ai:
+    # Pin >= 0.9: releases 0.8.7 and 0.9.0 fixed critical vulnerabilities in the Docker
+    # API server (RCE, SSRF, authentication bypass). 0.9.0 enabled auth by default.
+    image: unclecode/crawl4ai:0.9.4
+    profiles: ["scrape"]
+    environment:
+      CRAWL4AI_API_TOKEN: ${CRAWL4AI_API_TOKEN}
+    # No published ports: reachable by service name from sibling containers, unreachable
+    # from the host or the LAN. Outbound access stays open because it has to — this is a
+    # crawler. Article content is treated as untrusted input for the whole pipeline.
+    shm_size: 1gb
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:0.31.1
+    profiles: ["server"]
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+    restart: unless-stopped
+
+  ingest:
+    build: .
+    # --interval, not a bare pass: under `restart: unless-stopped` a process that exits
+    # after one pass is restarted immediately, which would poll the portals continuously.
+    # Two hours rather than six: WP's feed carries fifteen items, so a busy news cycle can
+    # roll the whole window between passes. Conditional GET makes the extra polls nearly
+    # free — Onet and TVN24 answer 304 when nothing changed.
+    command: ["python", "-m", "ingest", "--interval", "7200"]
+    profiles: ["pipeline", "full"]
+    env_file: [.env, .env.docker]
+    extra_hosts:
+      # Docker Desktop resolves this name on its own; the mapping is here so the same
+      # compose file works on the Linux server, where it otherwise does not exist.
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  analyzer:
+    build: .
+    # --interval for the same reason as ingest, only what it would hammer is Ollama.
+    command: ["python", "-m", "analyzer", "--interval", "900"]
+    profiles: ["pipeline", "full"]
+    env_file: [.env, .env.docker]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # Split from ingest on purpose: fetching is fast and network-bound, analysis is slow
+    # and compute-bound. In one process the slow half starves the fast one.
+    #
+    # Ollama is deliberately absent from depends_on: on the laptop it runs on the host,
+    # outside compose's knowledge. A backend that is down is a designed path — the pass
+    # aborts after three consecutive failures and charges none of them to the articles.
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  api:
+    build: .
+    command:
+      ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "src"]
+    profiles: ["full"]
+    # Both files, like ingest and analyzer: .env alone points DATABASE_URL at the host's
+    # published port, which inside a container is the container. .env.docker overrides it
+    # with the compose service name.
+    env_file: [.env, .env.docker]
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    # Next.js front end. `API_URL` appears twice on purpose and neither one is redundant:
+    # the build argument is frozen into the rewrite in routes-manifest.json, while the
+    # environment variable is what the Server Components read on each request.
+    build:
+      context: ./web
+      args:
+        API_URL: http://api:8000
+    environment:
+      API_URL: http://api:8000
+    profiles: ["full"]
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  ollama_data:

@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/binkowskidawid/news-aggregator/security/advisories/new
+    about: >-
+      Report privately, not as an issue. What is in and out of scope is in SECURITY.md — a
+      wrong finding is not a vulnerability, and neither is prompt injection that only affects
+      the one response it appears in.
+  - name: What the numbers mean
+    url: https://github.com/binkowskidawid/news-aggregator/blob/main/MODEL_CARD.md
+    about: >-
+      Measured accuracy, the conditions it was measured under, and what was never measured at
+      all. Worth reading before reporting that the model is often wrong — it is, and by how
+      much is written down.

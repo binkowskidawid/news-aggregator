@@ -1,0 +1,63 @@
+name: Bug
+description: Something in the code does not do what it says it does.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **A wrong finding is not a bug.** Fewer than half of what this system underlines is
+        correct, that number is measured and published, and the interface says so. Use
+        *Misclassified fragment* for those — they are useful, but they are data, not defects.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: >
+        The shortest sequence that shows it. A failing test is the best possible version of
+        this field.
+      placeholder: |
+        1. make up && make migrate
+        2. …
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Actual output
+      description: >
+        Paste the real error, in full and unedited. Do not paraphrase it, and check it for
+        API keys and personal data before you paste.
+      render: text
+
+  - type: input
+    id: version
+    attributes:
+      label: Commit
+      description: Output of `git rev-parse --short HEAD`.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Where
+      options:
+        - Ingest (fetching, robots, parsing)
+        - Analyzer (prompt, providers, quote validation)
+        - API
+        - Front end
+        - Evaluation harness
+        - Build, containers or CI
+        - Not sure
+    validations:
+      required: true

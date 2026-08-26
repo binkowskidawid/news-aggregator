@@ -1,0 +1,75 @@
+slug,type,field,quote,note
+gangi-genewa,emotional_load,title,Szwajcarska bajka upada,"Metafora oceniająca, nie opis. Dostępny neutralny odpowiednik: wzrost przestępczości."
+gangi-genewa,emotional_load,title,Brutalne gangi sieją postrach w Genewie,"Rejestr sensacyjny; 'sieją postrach' i 'brutalne' to ocena, nie relacja."
+gangi-genewa,emotional_load,lead,gangi z południa Francji terroryzują Genewę,'Terroryzują' zamiast neutralnego 'dokonują napadów'.
+amazon-putina,emotional_load,title,Nowa strategia Kijowa zbiera żniwo,"'Zbiera żniwo' to hiperbola redakcji, nie opis skutku."
+amazon-putina,emotional_load,lead,Dla rosyjskiego społeczeństwa to efekt szokowy,"Ocena reakcji społeczeństwa bez źródła, w rejestrze sensacyjnym."
+amazon-putina,emotional_load,lead,na własnej skórze poczuło koszmar wojny,Frazeologizm oceniający w głosie redakcji.
+szokujace-s7,emotional_load,title,Szokujące szczegóły wypadku na S7,Podręcznikowy przypadek: 'szokujące' to wprost przykład z definicji w prompcie.
+bialorus-polskosc,loaded_question,title,"Chcą zniszczyć wszelkie przejawy ""polskości""?",Pytanie zakłada niedowiedziony zamiar zniszczenia; lead mówi o wykreślaniu z listy zabytków.
+rosyjskie-bazy-zasieg,emotional_load,title,Niepokojące doniesienia,Ocena redakcji dopisana do treści usourcowanej w leadzie do 'Daily Telegraph'.
+smierc-na-wynos,emotional_load,title,Śmierć na wynos,Metafora sensacyjna zbudowana na skojarzeniu z dostawą jedzenia.
+smierc-na-wynos,emotional_load,title,Dzieci od brudnej roboty,"'Brudna robota' to ocena, nie nazwa zjawiska."
+smierc-na-wynos,unsourced_figure,lead,Niektórzy rekruci mają zaledwie 11 lat,Partykuła wzmacniająca 'zaledwie' przy liczbie podanej bez źródła i skali zjawiska.
+renta-wdowia,unsourced_figure,title,Niektórzy zyskają nawet kilkaset złotych miesięcznie,"'Nawet kilkaset' bez podstawy wyliczenia. Procenty w leadzie są usourcowane do ZUS i datowane, więc one nie są tym."
+ceny-paliw-wtorek,clickbait_hook,title,Tyle zapłacimy za tankowanie,Luka informacyjna: tytuł zapowiada kwotę i jej nie podaje.
+pisk-jek-relacja,emotional_load,title,Wstrząsająca relacja z wypadku autokaru,"'Wstrząsająca' to kwalifikator redakcji. Sam cytat 'Jeden pisk, jeden jęk' pochodzi od poszkodowanej i nie podlega ocenie."
+dramatyczne-relacje,emotional_load,title,Dramatyczne relacje rannych w wypadku,Kwalifikator redakcji przy cytacie poszkodowanej.
+dramatyczne-relacje,emotional_load,lead,"opowiedzieli o chwilach grozy, walce o każdy oddech","To streszczenie redakcji, nie cytat — 'chwile grozy' i 'walka o każdy oddech' pochodzą od dziennikarza."
+machina-deportacyjna,emotional_load,title,Polacy w machinie deportacyjnej Trumpa,"'Machina deportacyjna' to metafora redakcji. Cytat o pleśni pochodzi od zatrzymanych i jest relacją, nie zabiegiem."
+wstrzasajaca-relacja,emotional_load,title,Wstrząsająca relacja Polki poszkodowanej,Kwalifikator redakcji. 'Rękami rwałam ziemię' oraz słowa sołtysa o największej tragedii są cytatami i nie podlegają ocenie.
+etna-lotnisko-katania,emotional_load,title,Paraliżuje ruch lotniczy w Katanii,"Lead przeczy tytułowi: lądowania trwają (10/h), odloty bez ograniczeń. Neutralny odpowiednik: ogranicza."
+amazon-putina,emotional_load,title,Ukraina odpowiedziała pięknym za nadobne,"Frazeologizm aprobujący w głosie redakcji, nie opis działania."
+amazon-putina,emotional_load,lead,Przez lata wojny Rosja terroryzowała Ukrainę,'Terroryzowała' zamiast neutralnego 'atakowała'; ten sam zabieg oznaczony w gangi-genewa.
+amazon-putina,emotional_load,lead,paraliżując Rosję jej własną bronią,Hiperbola: uderzenie w magazyny sprzedawcy nie sparaliżowało państwa.
+bialorus-polskosc,emotional_load,lead,postrzegane przez reżim jako polskie,'Reżim' zamiast neutralnego 'władze'. Kryterium bezstronności wymaga tej samej miary niezależnie od ocenianego rządu.
+smierc-na-wynos,emotional_load,lead,Tyle że zamiast pizzy - strzał,"Puenta rozbudowanej metafory redakcji, rejestr sensacyjny."
+dramatyczne-relacje,emotional_load,lead,to tylko jeden z dramatycznych głosów polskich pielgrzymów,"Drugi kwalifikator redakcji w tym samym leadzie, osobny fragment od 'chwil grozy'."
+hiszpania-wysycha-portugalie,emotional_load,title,Południe Europy w kryzysie,Zbiorcza ocena regionu dopisana do dwóch konkretnych zjawisk.
+nowa-bron-ukrainy,emotional_load,title,Nowa broń Ukrainy imponuje możliwościami,'Imponuje' to ocena redakcji; lead podaje wyłącznie zasięg.
+nowa-bron-ukrainy,emotional_load,title,Nawet USA mogą pozazdrościć,"Domysł redakcji o cudzej reakcji, podany jak spostrzeżenie."
+setki-dronow-polecialy,emotional_load,title,Płonie zaplecze armii Putina,Lead mówi o magazynie sprzedawcy internetowego; 'zaplecze armii' to przekwalifikowanie celu przez redakcję.
+tragiczny-wypadek-wegrzech,clickbait_hook,title,"Wiadomo, co z ewakuacją",Tytuł zapowiada rozstrzygnięcie i go nie podaje.
+pomagaja-ukrainie-traca,unsourced_figure,title,"Pomagają Ukrainie, tracą miliardy","'Miliardy' bez bazy i okresu; lead mówi o żądaniu 7 mld euro, czyli o postulacie, nie o stracie."
+pomagaja-ukrainie-traca,clickbait_hook,title,Padło żądanie przed wyborami,"Zatajony podmiot i treść żądania, które tytuł sam zapowiada."
+przegrywamy-nawet-rosjanie,overgeneralization,title,Nawet Rosjanie szykują się na najgorsze,Zachowanie przypisane całemu narodowi bez źródła i skali.
+przegrywamy-nawet-rosjanie,emotional_load,lead,Statek rosyjskiej gospodarki zanurzył się już w wodzie aż po dolny pokład,Rozbudowana metafora redakcji w miejscu opisu stanu gospodarki.
+tusk-szykuje-skok,emotional_load,title,TUSK SZYKUJE SKOK NA TRYBUNAŁ KONSTYTUCYJNY,'Skok na' to metafora przestępstwa; wersaliki wzmacniają rejestr.
+tusk-szykuje-skok,loaded_question,title,Przejęcie siłą przed wyborami?,Pytanie zakłada niedowiedzione przejęcie siłą.
+gigantyczne-zarobki-sobieranskiej,emotional_load,title,Gigantyczne zarobki Sobierańskiej-Grendy,Ocena wielkości bez podania kwoty ani punktu odniesienia.
+gigantyczne-zarobki-sobieranskiej,emotional_load,title,służba zdrowia znajduje się nad przepaścią,Metafora katastrofy zestawiona z zarobkami jednej osoby.
+armagedon-poludniu-polski,emotional_load,title,Armagedon na południu Polski,Hiperbola apokaliptyczna przy podtopieniach; lead podaje zwykłe interwencje straży.
+szokujace-ustalenia-balkanach,emotional_load,title,Szokujące ustalenia na Bałkanach,'Szokujące' to podręcznikowy przykład z definicji w prompcie.
+gang-rozbity-przez,unsourced_figure,title,Służby przejęły produkty warte miliony,"Wielkość bez bazy; dokładna kwota 3,5 mln zł jest dopiero w leadzie."
+spadek-stopni-potezne,emotional_load,title,potężne ulewy,'Potężne' zamiast standardowego 'intensywne opady' używanego przez IMGW.
+potracil-rower-burmistrz,clickbait_hook,title,Burmistrz Como odpowiedział radykalną decyzją,Decyzja zapowiedziana i zatajona; dodatkowo oceniona jako radykalna.
+londyn-bedzie-musial,clickbait_hook,title,"Moskwa grozi, jest reakcja",Reakcja zapowiedziana bez podania jej treści ani autora.
+posel-gomola-opalach,emotional_load,title,Poseł Gomoła w opałach,Idiom oceniający położenie posła; lead relacjonuje samo ujawnienie umowy.
+nie-dziala-ten,fear_appeal,title,Błędna kalkulacja Korei Południowej może ją kosztować bezpieczeństwo,"Warunkowa konsekwencja podana bez źródła, w formie ostrzeżenia — wzorzec z definicji."
+wielki-atak-moskwe,emotional_load,title,Wielki atak na Moskwę,Ocena skali bez podstawy; lead nie podaje liczby maszyn.
+nowa-fala-silnych,unsourced_figure,title,Spadnie nawet ponad 50 mm deszczu,Partykuła wzmacniająca 'nawet' przy liczbie bez wskazania obszaru i okresu.
+sondaz-poparcia-dla,emotional_load,title,Tak źle jeszcze nie było,"'Źle' to ocena wyniku sondażu, nie jego opis; lead podaje 33 proc. za Ipsos."
+wielki-strzal-stope,emotional_load,title,Wielki strzał w stopę Donalda Trumpa,"Idiom oceniający decyzję, w głosie redakcji."
+wielki-strzal-stope,emotional_load,title,wyświadczył Chinom ogromną przysługę,Przypisanie skutku i intencji w rejestrze publicystycznym.
+wielki-strzal-stope,emotional_load,lead,od zawsze była solą w oku dla Chin,Idiom plus kwantyfikator absolutny 'od zawsze'.
+tak-wygladalo-gradobicie,emotional_load,title,Nagrania mrożą krew w żyłach,Frazeologizm z rejestru sensacyjnego opisujący nagranie gradobicia.
+tak-wygladalo-gradobicie,emotional_load,lead,Potężne burze przeszły przez Polskę,'Potężne' zamiast standardowego określenia IMGW.
+rzad-donalda-tuska,overgeneralization,title,Polacy zabrali głos,"Zdanie próby sondażowej przypisane całemu narodowi, bez podania badania."
+glucholazy-okolice-ponownie,clickbait_hook,title,Jest reakcja z MSWiA,Reakcja zapowiedziana i zatajona.
+miliona-projekty-strone,unsourced_figure,title,Ponad ćwierć miliona zł dla trzech czynnych sędziów,"Kwota bez okresu, podstawy wypłaty i źródła danych."
+spektakularna-akcja-ukrainskich,emotional_load,title,Spektakularna akcja ukraińskich komandosów,Ocena operacji wojskowej; dostępny neutralny odpowiednik: udana.
+spektakularna-akcja-ukrainskich,emotional_load,lead,odbiły z rąk rosyjskich najeźdźców,'Najeźdźcy' zamiast 'wojsk rosyjskich'. Ta sama miara co przy 'reżimie' w bialorus-polskosc.
+jest-bardzo-zle,overgeneralization,title,Zwykli Rosjanie są zmęczeni,Stan przypisany całej grupie bez badania i skali.
+jest-bardzo-zle,emotional_load,lead,Wojna wywołała w Rosji prawdziwą epidemię samotności,"Metafora medyczna wzmocniona przez 'prawdziwą', bez danych."
+ukraina-bezuzytecznymi-wyrzutniami,emotional_load,lead,żołnierze z poczuciem bezsilności patrzą na lecące rakiety wroga,Scena dopisana przez redakcję wokół cytatu; 'wroga' zamiast 'rosyjskie'.
+warszawy-wprost-teheranu,loaded_question,title,Tak płynęły miliardy dla Iranu?,"Pytanie zakłada przepływ miliardów, którego sam tytuł nie dowodzi."
+wypadek-pielgrzymow-dramatyczne,emotional_load,title,dramatyczne relacje ocalałych,Kwalifikator redakcji przy cytacie poszkodowanej; sam cytat nie podlega ocenie.
+dlaczego-roku-rok,loaded_question,title,Dlaczego z roku na rok deficyt budżetowy jest coraz wyższy?,Pytanie zakłada stały wzrost deficytu jako fakt dowiedziony.
+ekologiczne-ambicje-kontra,fear_appeal,title,Pomysł UE może wywołać szok cenowy,Warunkowa konsekwencja bez źródła — wzorzec 'to może oznaczać koniec…'.
+propaganda-legla-gruzach,emotional_load,title,Propaganda legła w gruzach,Metafora zwycięstwa nad przeciwnikiem w głosie redakcji.
+propaganda-legla-gruzach,emotional_load,title,Ogromne poparcie dla Marty Nawrockiej,"Ocena wielkości poparcia bez podania wyniku sondażu, na który tytuł się powołuje."
+znowu-strzelanina-szkole,emotional_load,title,Są niestety ofiary!,"'Niestety' to komentarz redakcji, nie relacja; wykrzyknik wzmacnia."
+spor-pomoc-polskim,clickbait_hook,title,Padły mocne słowa,Tytuł zapowiada wypowiedź i jej nie podaje.
+setki-milionow-forintow,unsourced_figure,title,Setki milionów forintów,Wielkość bez bazy i okresu; lead podaje 350 mln za węgierskimi mediami.
+wpadka-posla-skrytykowal,emotional_load,title,Wpadka posła KO,Kwalifikacja zachowania jako wpadki to ocena redakcji.
+wpadka-posla-skrytykowal,emotional_load,lead,wywołuje ogromne emocje,"Ocena odbioru bez wskazania, u kogo i na jakiej podstawie."

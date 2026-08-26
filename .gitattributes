@@ -1,0 +1,15 @@
+# Line endings settled here rather than left to each contributor's core.autocrlf. Without
+# this, a checkout on Windows and one on Linux disagree about every line of LICENSE and of
+# the CSV fixtures, and the first pull request from either shows a diff of the whole file.
+* text=auto eol=lf
+
+# Binary or offset-sensitive: the gold sets index into stored text, and a line-ending
+# rewrite would move every offset measured against them.
+*.png binary
+*.jpg binary
+*.ico binary
+
+# Generated, and reviewed as a whole or not at all. Collapsed in pull request diffs.
+uv.lock linguist-generated=true
+web/pnpm-lock.yaml linguist-generated=true
+web/lib/api-types.ts linguist-generated=true

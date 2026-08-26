@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: >-
+  news-aggregator: span-level reporting of language techniques in Polish news headlines
+message: >-
+  If you cite the measurements in this repository, cite the release they were taken from.
+  The figures describe one configuration — model, prompt version and input variant — and
+  MODEL_CARD.md records which.
+type: software
+authors:
+  - family-names: Bińkowski
+    given-names: Dawid
+    email: d.k.binkowski@gmail.com
+repository-code: https://github.com/binkowskidawid/news-aggregator
+abstract: >-
+  Fetches Polish news articles, classifies them by topic, and reports specific language
+  techniques in the headline and lead, each anchored to the verbatim quote it is about. Every
+  model call runs on hardware the operator controls. Measured on 64 held-out articles: the
+  underline lands on a fragment an annotator also marked in 47% of cases, the technique named
+  beside it is also correct in 42%, and 100% of quotes were found verbatim in the source. A
+  quote that cannot be located in the source text is discarded rather than repaired.
+keywords:
+  - persuasion technique detection
+  - Polish
+  - media analysis
+  - large language models
+  - span extraction
+license: Apache-2.0
+version: 0.1.0

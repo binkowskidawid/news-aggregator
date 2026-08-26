@@ -1,0 +1,27 @@
+# Local working notes and generated reports. `make audit-sources` and `make eval-report`
+# write here, and their output is reproducible from the database rather than committed.
+docs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+
+# Env / secrets
+.env
+!.env.example
+
+# Raw model responses from evaluation runs — large and reproducible.
+eval/runs/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Screenshots and snapshots left by the Playwright MCP browser
+.playwright-mcp/

@@ -1,0 +1,32 @@
+# `COPY . /app` takes the whole context. Without this it also takes the virtualenv the
+# image is about to build for itself, the front end's node_modules, and docs/ — which is
+# git-ignored precisely because it is local working material and has no business being
+# baked into a distributable image.
+
+.venv/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+docs/
+.git/
+.github/
+.remember/
+.claude/
+.playwright-mcp/
+
+# The front end has its own image and its own build context.
+web/
+
+# Raw evaluation responses: large, reproducible, and not needed at run time.
+eval/runs/
+
+# Compose reads .env and .env.docker from the host through `env_file`; nothing inside the
+# image needs either, and baking one in would ship whatever the builder happened to hold.
+.env
+.env.*
+.DS_Store
+.idea/
+.vscode/

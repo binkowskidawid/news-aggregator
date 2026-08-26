@@ -1,0 +1,191 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A new push to the same branch makes an in-flight run obsolete.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    # The queue is SQL — a back-off in a WHERE clause, a retirement in a CASE. Skipping
+    # those tests locally is a deliberate convenience; skipping them in CI would mean
+    # nothing ever runs them. 18 because the schema needs uuidv7().
+    services:
+      postgres:
+        image: postgres:18-trixie
+        env:
+          POSTGRES_USER: news
+          POSTGRES_PASSWORD: news
+          POSTGRES_DB: news
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U news"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://news:news@127.0.0.1:5432/news
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.14
+
+      - name: Install dependencies
+        run: uv sync --all-extras --locked
+
+      - name: Lint
+        run: uv run ruff check --output-format=github .
+
+      - name: Format check
+        run: uv run ruff format --check .
+
+      - name: Type check
+        run: uv run mypy src tests
+
+      - name: Test
+        run: uv run pytest
+
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.14
+
+      # `uv audit` reads uv.lock directly, so there is no environment to build and nothing to
+      # keep in step with the lockfile. It is marked experimental by uv and the flag is what
+      # silences the warning about that; if a future uv drops or renames it, `pip-audit`
+      # against `uv export --format requirements-txt` is the replacement.
+      - name: Audit Python dependencies
+        run: uv audit --frozen --preview-features audit-command
+
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: web/package.json
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+
+      - name: Audit front-end dependencies
+        working-directory: web
+        run: pnpm audit --audit-level high
+
+  web:
+    runs-on: ubuntu-latest
+
+    # The browser tests read the corpus through the same rewrite a reader's browser uses, so
+    # they need the API, and the API needs a database. CI has no corpus: web/e2e/fixtures.sql
+    # supplies the three article shapes the renderer has to survive.
+    services:
+      postgres:
+        image: postgres:18-trixie
+        env:
+          POSTGRES_USER: news
+          POSTGRES_PASSWORD: news
+          POSTGRES_DB: news
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U news"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://news:news@127.0.0.1:5432/news
+      API_URL: http://127.0.0.1:8000
+      # The browser tests speak plain HTTP to 127.0.0.1. With the default, Chromium discards
+      # the session cookie without a word and every account test fails as "sign-in did
+      # nothing" — the failure this flag exists to make explicit rather than silent.
+      COOKIE_SECURE: "0"
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.14
+
+      - name: Install Python dependencies
+        run: uv sync --all-extras --locked
+
+      # `make migrate` goes through docker compose; the database here is a service container.
+      - name: Apply the schema and the browser-test corpus
+        run: |
+          for file in migrations/*.sql; do
+            psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f "$file"
+          done
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f web/e2e/fixtures.sql
+
+      # The version comes from `packageManager` in web/package.json. Without the path the
+      # action looks for a package.json at the repository root, where there is none.
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: web/package.json
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+
+      - name: Install front-end dependencies
+        working-directory: web
+        run: pnpm install --frozen-lockfile
+
+      - name: Check the front end
+        working-directory: web
+        run: pnpm typecheck && pnpm lint && pnpm test
+
+      - name: Install the browser
+        working-directory: web
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Start the API
+        run: |
+          nohup uv run uvicorn api.main:app --app-dir src --host 127.0.0.1 --port 8000 \
+            > api.log 2>&1 &
+          for _ in $(seq 1 30); do
+            if curl -sf "$API_URL/health" > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          echo "the API never became healthy:" >&2
+          cat api.log >&2
+          exit 1
+
+      - name: Browser tests
+        working-directory: web
+        run: pnpm test:e2e

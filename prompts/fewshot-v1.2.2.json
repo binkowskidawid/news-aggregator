@@ -1,0 +1,42 @@
+[
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Tragiczny wypadek na Węgrzech. Wojewoda przekazała nowe informacje\nLEAD: 21 osób wczoraj przyleciało do Polski. Pięć z nich zostało przewiezionych do szpitali — poinformowała wojewoda podkarpacka.\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"inne\", \"category_confidence\": 0.86, \"overall_assessment\": \"neutral\", \"findings\": []}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Czy oni w ogóle myślą o zwykłych ludziach? Szokująca decyzja w sprawie cen\nLEAD: Aż 80 procent Polaków może odczuć skutki nowych regulacji. Eksperci ostrzegają, że to może być początek prawdziwej katastrofy dla domowych budżetów.\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"biznes\", \"category_confidence\": 0.79, \"overall_assessment\": \"heavily_loaded\", \"findings\": [{\"type\": \"loaded_question\", \"quote\": \"Czy oni w ogóle myślą o zwykłych ludziach?\", \"explanation\": \"Pytanie zakłada, że decydenci nie biorą pod uwagę interesu obywateli. Założenie nie jest w tekście wykazane.\", \"confidence\": 0.93}, {\"type\": \"emotional_load\", \"quote\": \"Szokująca decyzja\", \"explanation\": \"Wartościujące określenie decyzji w tytule, bez uzasadnienia w treści.\", \"confidence\": 0.88}, {\"type\": \"unsourced_figure\", \"quote\": \"Aż 80 procent Polaków\", \"explanation\": \"Procent bez wskazania źródła, metody i okresu. Partykuła wzmacniająca podnosi wagę liczby.\", \"confidence\": 0.9}, {\"type\": \"fear_appeal\", \"quote\": \"to może być początek prawdziwej katastrofy dla domowych budżetów\", \"explanation\": \"Zapowiedź dotkliwych skutków bez podstaw i bez wskazania ekspertów, na których się powołano.\", \"confidence\": 0.85}]}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Wypadek autokaru na Węgrzech. Adwokat o kierowcy: Jest w stanie szoku\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"inne\", \"category_confidence\": 0.82, \"overall_assessment\": \"neutral\", \"findings\": []}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Bajońska umowa Pentagonu. Armia USA wyda miliardy na jeden pocisk\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"geopolityka\", \"category_confidence\": 0.84, \"overall_assessment\": \"mildly_loaded\", \"findings\": [{\"type\": \"emotional_load\", \"quote\": \"Bajońska umowa Pentagonu\", \"explanation\": \"Hiperbola oceniająca wartość kontraktu; dostępny neutralny odpowiednik nie zawiera oceny.\", \"confidence\": 0.85}, {\"type\": \"unsourced_figure\", \"quote\": \"wyda miliardy na jeden pocisk\", \"explanation\": \"Wielkość bez kwoty, okresu i źródła.\", \"confidence\": 0.78}]}"
+  },
+  {
+    "role": "user",
+    "content": "<article_{{NONCE}}>\nTYTUŁ: Toruń: jaka pogoda czeka nas 18.08.2026?\n</article_{{NONCE}}>"
+  },
+  {
+    "role": "assistant",
+    "content": "{\"category\": \"inne\", \"category_confidence\": 0.79, \"overall_assessment\": \"neutral\", \"findings\": []}"
+  }
+]

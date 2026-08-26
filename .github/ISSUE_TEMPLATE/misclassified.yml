@@ -1,0 +1,65 @@
+name: Misclassified fragment
+description: The model underlined the wrong words, or named the wrong technique.
+labels: ["analysis-quality"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These are expected and they are still worth reporting. Measured on 64 articles the
+        prompt was never tuned against, the underline lands where an annotator also marked it
+        **47%** of the time, and the technique beside it is right in **42%**. See
+        [MODEL_CARD.md](../../MODEL_CARD.md).
+
+        What makes a report useful is not that the model was wrong — it is that you can say
+        what the right answer was and why. Enough of those become the material for a prompt
+        change with a measurement behind it.
+
+  - type: input
+    id: url
+    attributes:
+      label: Source article
+      description: The publisher's own link, so the headline can be read as published.
+    validations:
+      required: true
+
+  - type: textarea
+    id: quote
+    attributes:
+      label: The fragment as the model reported it
+      description: Copy it verbatim, together with the technique name shown beside it.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is wrong with it
+      options:
+        - The fragment is neutral — nothing should have been reported here
+        - The right fragment, the wrong technique
+        - The right idea, the wrong span (too long, too short, shifted)
+        - A technique is present but was missed entirely
+        - The topic category is wrong
+    validations:
+      required: true
+
+  - type: textarea
+    id: correct
+    attributes:
+      label: What the correct analysis is, and why
+      description: >
+        Argue it. "This is obviously wrong" cannot be turned into a labelled example; "the
+        phrase reports the court's wording rather than the outlet's, so it is quoted speech
+        and out of scope" can.
+    validations:
+      required: true
+
+  - type: input
+    id: config
+    attributes:
+      label: Model and prompt version
+      description: >
+        Shown under every analysis in the interface, and in `provenance` in the API response.
+      placeholder: gemma4:latest, prompt v1.1.3
+    validations:
+      required: true

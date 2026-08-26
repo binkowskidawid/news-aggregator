@@ -1,0 +1,22 @@
+# `COPY . .` in the builder stage runs after node_modules has been installed from the
+# lockfile. Without these, the host's copies would land on top of it — a build that depends
+# on whatever the developer's machine happens to hold is not a build.
+node_modules
+.next
+
+# Test output and local artefacts. None of it belongs in an image.
+test-results
+playwright-report
+.playwright-mcp
+e2e
+tsconfig.tsbuildinfo
+lib/openapi.json
+
+# Instructions for coding agents, not for the runtime.
+AGENTS.md
+CLAUDE.md
+
+# Next reads .env* during `next build`, so a developer's local file would be baked into the
+# image. The root .dockerignore excludes these for the same reason.
+.env
+.env.*

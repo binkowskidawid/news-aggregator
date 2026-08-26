@@ -1,0 +1,6 @@
+# Native build scripts pnpm blocks by default. All three belong to the toolchain rather
+# than to the application: file watching, the eslint resolver, and SWC.
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  unrs-resolver: true

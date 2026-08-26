@@ -1,0 +1,114 @@
+{
+  "app": {
+    "name": "Analiza języka prasy",
+    "tagline": "Wskazuje fragmenty tytułów i leadów, w których model rozpoznał technikę językową. Nie ocenia redakcji ani prawdziwości.",
+    "languageLabel": "Język",
+    "skipToContent": "Przejdź do treści"
+  },
+  "feed": {
+    "heading": "Najnowsze",
+    "empty": "Brak artykułów dla tego wyboru.",
+    "onlyReported": "Tylko ze zgłoszeniami",
+    "onlyClean": "Tylko bez zgłoszeń",
+    "everything": "Wszystkie",
+    "counted": "{count, plural, =0 {bez zgłoszeń} one {# zgłoszenie} few {# zgłoszenia} many {# zgłoszeń} other {# zgłoszenia}}",
+    "showing": "{from}–{to} z {total}",
+    "next": "Dalej",
+    "previous": "Wstecz",
+    "readAnalysis": "Zobacz analizę"
+  },
+  "category": {
+    "all": "Wszystkie kategorie",
+    "polityka": "polityka",
+    "kultura": "kultura",
+    "technologia": "technologia",
+    "sport": "sport",
+    "biznes": "biznes",
+    "geopolityka": "geopolityka",
+    "zdrowie": "zdrowie",
+    "inne": "inne"
+  },
+  "assessment": {
+    "neutral": "bez zastrzeżeń",
+    "mildly_loaded": "język lekko nacechowany",
+    "heavily_loaded": "język mocno nacechowany"
+  },
+  "finding": {
+    "emotional_load": "ładunek emocjonalny",
+    "fear_appeal": "odwołanie do strachu",
+    "overgeneralization": "nadmierne uogólnienie",
+    "loaded_question": "pytanie sugerujące",
+    "unsourced_figure": "liczba bez źródła",
+    "clickbait_hook": "haczyk na kliknięcie"
+  },
+  "detail": {
+    "backToFeed": "Wróć do listy",
+    "title": "Tytuł",
+    "lead": "Lead",
+    "noticed": "Model zwrócił uwagę na ten fragment",
+    "nothingReported": "Model nie zgłosił tu żadnego fragmentu. To nie jest zaświadczenie o neutralności — to brak zgłoszenia.",
+    "neutralAlternative": "Bez nacechowania mogłoby brzmieć:",
+    "openSource": "Otwórz artykuł u wydawcy",
+    "modelOutput": "tekst modelu, po polsku",
+    "findingsHeading": "Zgłoszone fragmenty",
+    "checkSource": "sprawdź ten fragment w oryginale"
+  },
+  "reliability": {
+    "short": "Trzy zgłoszenia na pięć bywają pomyłką.",
+    "long": "Zgłoszenia produkuje model językowy. W kontroli na 64 artykułach, których nigdy nie widział: w 47% przypadków podkreślenie trafia we właściwy fragment, a w 42% trafna jest też nazwa techniki. Każdy podświetlony fragment sprawdź w oryginale — po to jest przy nim odnośnik."
+  },
+  "provenance": {
+    "generated": "Analiza wygenerowana przez model. Nikt jej nie sprawdził.",
+    "details": "{model}, prompt {version}, {date}"
+  },
+  "account": {
+    "signIn": "Zaloguj się",
+    "signOut": "Wyloguj",
+    "createAccount": "Załóż konto",
+    "account": "Konto",
+    "email": "Adres e-mail",
+    "password": "Hasło",
+    "passwordHint": "Co najmniej {count} znaków.",
+    "registerExplainer": "Konto zapamiętuje zapisane artykuły i wybrane kategorie. Nie zmienia tego, co widzisz w analizie — ta jest taka sama dla wszystkich.",
+    "noAccount": "Nie masz konta? <link>Załóż je</link>.",
+    "haveAccount": "Masz już konto? <link>Zaloguj się</link>.",
+    "wrongCredentials": "Nieprawidłowy adres lub hasło.",
+    "addressTaken": "Konto z tym adresem już istnieje.",
+    "invalidInput": "Sprawdź adres i długość hasła.",
+    "tooManyAttempts": "Za dużo prób. Spróbuj ponownie za kilkanaście minut.",
+    "failed": "Nie udało się. Spróbuj ponownie.",
+    "saved": "Zapisane",
+    "savedEmpty": "Nie masz jeszcze zapisanych artykułów.",
+    "save": "Zapisz",
+    "unsave": "Usuń z zapisanych",
+    "subscriptionsHeading": "Obserwowane kategorie",
+    "subscriptionsExplainer": "Zaznacz kategorie, które Cię interesują. Nic nie jest wysyłane — ten wybór jest zapisywany na koncie.",
+    "saveSubscriptions": "Zapisz wybór",
+    "subscriptionsSaved": "Zapisano.",
+    "deleteHeading": "Usunięcie konta",
+    "deleteExplainer": "Usuwa konto, sesje, zapisane artykuły i obserwowane kategorie. Nieodwracalnie.",
+    "deleteAccount": "Usuń konto",
+    "deleteConfirm": "Tak, usuń moje konto",
+    "cancel": "Anuluj",
+    "exportHeading": "Kopia danych",
+    "exportExplainer": "Pobiera wszystko, co konto przechowuje: adres, datę założenia, czasy sesji, zapisane artykuły i obserwowane kategorie. Bez hasła i bez tokenów sesji — te są poświadczeniami, nie danymi.",
+    "exportDownload": "Pobierz kopię (JSON)"
+  },
+  "ops": {
+    "heading": "Panel operatora",
+    "explainer": "Diagnostyka modelu i potoku. Wszystko tutaj mówi o tym, jak działa analiza — nigdy o tym, jak pisze którakolwiek redakcja.",
+    "checks": "Kontrole spójności",
+    "allPassing": "Wszystkie kontrole przechodzą.",
+    "someFailing": "{count, plural, one {# kontrola nie przechodzi} few {# kontrole nie przechodzą} other {# kontroli nie przechodzi}}.",
+    "passing": "przechodzi",
+    "failures": "{count, plural, one {# naruszenie} few {# naruszenia} other {# naruszeń}}",
+    "corpus": "Korpus",
+    "promptVersions": "Wersje promptu w feedzie",
+    "promptVersionsWhy": "Więcej niż jeden wiersz znaczy, że feed pokazuje analizy, których nie da się ze sobą porównać.",
+    "queue": "Kolejka",
+    "findingTypes": "Typy zgłoszeń",
+    "drift": "Dryf (14 dni)",
+    "driftWhy": "Rosnące „quotes_rejected” to walidator cytatów wykonujący swoją pracę. Wzrost znaczy, że zmienił się model, prompt albo tekst, względem którego liczone są offsety.",
+    "fetchErrors": "Błędy pobierania (14 dni)"
+  }
+}

@@ -1,0 +1,10 @@
+news-aggregator
+Copyright 2026 Dawid Bińkowski
+
+This product includes software developed by Dawid Bińkowski.
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+This repository distributes source code only. It does not distribute model
+weights, article text, or any corpus. The model named in MODEL_CARD.md is
+pulled by the operator from their own Ollama installation and carries its own
+licence, which this project neither grants nor restricts.

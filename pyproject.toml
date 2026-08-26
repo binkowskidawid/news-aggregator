@@ -1,0 +1,91 @@
+[project]
+name = "news-aggregator"
+version = "0.1.0"
+description = "Polish news aggregator with LLM-based manipulation-indicator analysis."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "httpx>=0.28",
+    "pydantic>=2.13",
+    "psycopg[binary,pool]>=3.3",
+    "rapidfuzz>=3.14",
+]
+
+[project.optional-dependencies]
+# Source fetching. Not needed to run the evaluation harness against a stored gold set,
+# so it stays out of the base install.
+ingest = [
+    "feedparser>=6.0",
+    "trafilatura>=2.0",
+    "selectolax>=0.3",
+    "protego>=0.5",
+]
+api = [
+    "argon2-cffi>=25.1.0",
+    "fastapi>=0.141.1",
+    "pydantic[email]>=2.13.4",
+    "uvicorn[standard]>=0.52.4",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18",
+    "pre-commit>=4.4",
+    "pytest>=8.4",
+    "pytest-asyncio>=1.2",
+    "ruff>=0.14",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+src = ["src", "tests"]
+# Ruff formats Python blocks inside Markdown, and docs/ holds local notes and generated
+# reports whose code samples are quoted material, not project source. Excluded explicitly
+# rather than relying on .gitignore, which ruff only honours inside a git work tree.
+extend-exclude = ["docs"]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "F",      # pyflakes
+    "I",      # import sorting
+    "UP",     # pyupgrade
+    "B",      # bugbear
+    "SIM",    # simplify
+    "RUF",    # ruff-specific
+    "ASYNC",  # async correctness
+    "S",      # bandit security checks
+    "PTH",    # prefer pathlib over os.path
+]
+[tool.ruff.lint.per-file-ignores]
+# pytest is built on assert statements; test fixtures trip the hardcoded-secret checks.
+"tests/*" = ["S101", "S105", "S106"]
+# RUF001 flags visually ambiguous characters. In the typography table they are the
+# subject matter: `"–": "-"  # en dash` reads better than the escape it would become.
+# Invisible characters are still written as escapes there and everywhere else.
+"src/analyzer/validator.py" = ["RUF001"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+disallow_untyped_defs = true
+warn_unreachable = true
+mypy_path = "src"
+
+# Neither ships type information. Both are confined to the ingest layer (and the source
+# audit that shares its helpers), behind narrow wrappers that re-type what they return,
+# so the untyped surface stops there.
+[[tool.mypy.overrides]]
+module = ["feedparser.*", "selectolax.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+# Fail on unraisable exceptions and unhandled warnings rather than printing them.
+filterwarnings = ["error"]

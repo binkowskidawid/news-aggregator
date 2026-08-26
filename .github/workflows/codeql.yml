@@ -1,0 +1,41 @@
+name: CodeQL
+
+# Separate from CI because it is slow and its failures are not build failures: a finding here
+# is something to read, not a reason to block a pull request that passed its own tests. The
+# weekly run is the point — advisories land after the code stops changing.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "17 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript-typescript]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: github/codeql-action/init@v4
+        with:
+          language: ${{ matrix.language }}
+          # `security-extended` over the default: the ingest layer parses HTML from untrusted
+          # sources and the API renders model output, which is where the extra queries look.
+          queries: security-extended
+
+      - uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:${{ matrix.language }}
