@@ -3,8 +3,13 @@
 # the CSV fixtures, and the first pull request from either shows a diff of the whole file.
 * text=auto eol=lf
 
-# Binary or offset-sensitive: the gold sets index into stored text, and a line-ending
-# rewrite would move every offset measured against them.
+# Binary, so never line-ending normalised.
+#
+# The reference sets under eval/ are deliberately not listed here, though an earlier version
+# of this comment implied they were. They carry no offsets — eval/gold_labels.csv is
+# slug/type/field/quote/note, and evals.gold resolves each quote to a span with locate_quote
+# when the set is loaded. Normalising them to LF moves nothing, and marking them binary would
+# cost a readable diff on the one kind of file most worth reviewing line by line.
 *.png binary
 *.jpg binary
 *.ico binary
