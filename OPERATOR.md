@@ -144,6 +144,27 @@ nothing sends anything.
 `COOKIE_SECURE=0` exists for local development over plain HTTP. In any deployment reachable
 by anyone else, leave it at 1.
 
+## The operator panel
+
+There is one, at `/pl/ops` or `/en/ops`: corpus counts, which prompt versions the stored
+analyses were produced under, queue depth, finding types, recent drift and fetch errors, plus
+the same integrity checks `make audit-data` runs, on the same definitions. It is read-only —
+nothing there changes any state.
+
+It is behind the `admin` role, and **nothing in the application grants that role**. That is
+deliberate: a running service able to promote its own accounts is one bug away from promoting
+somebody else's. Register normally, then promote yourself from the machine that holds the
+database:
+
+```bash
+make admin EMAIL='you@example.com'
+```
+
+**To an account without the role, every `/ops` path returns 404, not 403** — the operator
+surface is not confirmed to people who go looking for it. If you have not run the command
+above, the panel is indistinguishable from a page that does not exist. That is the intended
+behaviour and it is also the first thing to check when it seems broken.
+
 ## Serving it
 
 `make dev` is the development loop — Postgres, migrations, API and front end in one terminal.
