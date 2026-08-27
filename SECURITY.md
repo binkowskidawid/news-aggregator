@@ -44,10 +44,11 @@ Out of scope:
 Stated rather than hidden, and not to be reported as new:
 
 - **No password reset.** There is no mail path in this project at all.
-- **No request size limit** on the API.
-- **No Content-Security-Policy on the front end.** The API sets its own security headers in
-  middleware, including `default-src 'none'`; the front end serves real pages and needs a
-  different, looser policy, which is not written yet.
+- **The front end's CSP allows inline scripts and styles.** Next inlines its own bootstrap
+  into the document and Tailwind emits inline style attributes, so `'unsafe-inline'` stays in
+  `script-src` and `style-src`. Removing the first means a per-request nonce threaded through
+  next-intl's middleware; there is no nonce path for the second at all. Everything else in the
+  policy is closed, and the API's is `default-src 'none'`.
 - **No SBOM.** Dependencies are scanned on every run — `uv audit` against `uv.lock`,
   `pnpm audit` against the front end's, and CodeQL weekly — but nothing publishes a bill of
   materials.
@@ -67,7 +68,11 @@ Stated rather than hidden, and not to be reported as new:
 - The operator panel behind an admin role, answering 404 rather than 403 — and the API's
   own documentation routes (`/docs`, `/redoc`, `/openapi.json`) unmounted unless `API_DOCS=1`,
   because the front end proxies `/api/*` verbatim and the schema lists those same paths
-- Security headers set in application middleware rather than assumed from a reverse proxy
+- Security headers set in application middleware rather than assumed from a reverse proxy —
+  the API's own, and a looser Content-Security-Policy on the front end's pages
+- A 64 KB ceiling on request bodies, enforced both against the declared `Content-Length` and
+  by counting bytes as they arrive, so omitting the header under chunked encoding does not
+  get past it
 - The API container runs as an unprivileged user (`uid 10001`), because the ingest process
   parses HTML from untrusted sources
 - Quote verification against the source text, which is a correctness safeguard and an

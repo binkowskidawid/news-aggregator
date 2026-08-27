@@ -17,6 +17,7 @@ from typing import Final
 from fastapi import FastAPI
 
 from api.headers import SecurityHeaders
+from api.limits import RequestSizeLimit
 from api.routers import auth, feed, me, ops
 from config import Settings, load_dotenv
 from db import pool
@@ -61,6 +62,11 @@ app = FastAPI(
     openapi_url="/openapi.json" if _DOCS else None,
 )
 
+# Added first, so it ends up inside SecurityHeaders: the last one added is the outermost.
+# That order is deliberate — a 413 is still a response someone's browser reads, and it gets
+# the same headers as any other. Nothing above it buffers the request body, so the limit
+# still runs before anything holds one.
+app.add_middleware(RequestSizeLimit)
 app.add_middleware(SecurityHeaders)
 
 app.include_router(feed.router)

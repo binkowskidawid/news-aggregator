@@ -141,6 +141,14 @@ source-disable: ## Stop collecting from one source. Usage: make source-disable N
 	@test -n "$(NAME)" || { echo "NAME is required, e.g. make source-disable NAME='Interia'"; exit 1; }
 	@$(PSQL) -c "UPDATE sources SET active = false WHERE name = '$(NAME)' RETURNING name, active"
 
+# The operator panel is behind the `admin` role and nothing in the application grants it —
+# deliberately, because a running service that can promote its own accounts is one bug away
+# from promoting someone else's. The first admin is made here, by whoever holds the database.
+
+admin: ## Grant the operator panel to an existing account. Usage: make admin EMAIL='you@example.com'
+	@test -n "$(EMAIL)" || { echo "EMAIL is required, e.g. make admin EMAIL='you@example.com'"; exit 1; }
+	@$(PSQL) -c "UPDATE users SET role = 'admin' WHERE lower(email) = lower('$(EMAIL)') RETURNING email, role"
+
 ingest: ## Fetch one pass from every active source. Usage: make ingest [ARGS="--dry-run"]
 	uv run python -m ingest $(ARGS)
 

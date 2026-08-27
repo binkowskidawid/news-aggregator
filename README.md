@@ -6,6 +6,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue.svg)](migrations/)
 [![Next.js](https://img.shields.io/badge/Next.js-16.3-black.svg)](web/package.json)
 [![Checked](https://img.shields.io/badge/checked-ruff%20%2B%20mypy%20strict-black.svg)](Makefile)
+[![Built with Claude Code](https://img.shields.io/badge/built%20with-Claude%20Code-d97757.svg)](https://claude.com/claude-code)
 
 [![Model](https://img.shields.io/badge/model-local%20via%20Ollama-success.svg)](MODEL_CARD.md)
 [![Underline correct](https://img.shields.io/badge/underline%20correct-47%25-orange.svg)](MODEL_CARD.md)
@@ -121,6 +122,16 @@ declined however well they are written, because each one is holding something up
 A finding that is simply wrong is not a bug, and the issue templates say so. It is still worth
 reporting as a *misclassified fragment*, provided you can argue what the right answer was.
 
+## How this was built
+
+Written with [Claude Code](https://claude.com/claude-code) (Opus 5), under direction and
+review by the author, who is responsible for every line of it. The git history records the
+same thing in its trailers.
+
+The model wrote code. It did not produce the numbers: every figure in this repository comes
+from running that code against the reference sets under `eval/`, and
+[MODEL_CARD.md](MODEL_CARD.md) names the configuration each was taken under.
+
 ## Citing this
 
 The measurements describe one configuration. [CITATION.cff](CITATION.cff) carries the
@@ -128,5 +139,9 @@ metadata; [MODEL_CARD.md](MODEL_CARD.md) carries the conditions.
 
 ## Licence
 
-Apache-2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE). Source code only: no model weights,
-no article text, no corpus.
+Apache-2.0 — see [LICENSE](LICENSE). No model weights are distributed here.
+
+The licence covers the source code. It does not cover the material other people published:
+the annotated reference sets under `eval/` and the two saved responses under
+`tests/fixtures/`, both of which exist so the measurements can be checked. [NOTICE](NOTICE)
+says what they are and on what terms they are here.

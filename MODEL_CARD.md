@@ -44,6 +44,14 @@ than picked by hand — hand-picking was measured against sampling on the same r
 | main | 118 | 74 | prompt development; six prompt versions were compared on it |
 | **holdout** | 80 | 53 | never used for tuning; **the binding numbers come from here** |
 
+**`eval/gold_set.csv` in this repository holds 111 articles and 72 labels, not 118 and 74.**
+Seven articles from one publisher were removed before publication: that outlet reserves text
+and data mining rights, so the project does not collect from it and does not redistribute it
+either (see COMPLIANCE.md). The measurement was taken before they were removed and the
+figures below are **not** recalculated — restating them against a set nobody ran would be
+inventing a result. The holdout is untouched and contains no article from that publisher,
+which is why every binding number is unaffected.
+
 Annotation is exhaustive — every technique present is labelled, not the clearest one.
 The annotator is a language model whose disputed calls were reviewed by a human; the
 disputes and their resolutions are recorded outside this repository.
