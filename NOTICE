@@ -4,7 +4,32 @@ Copyright 2026 Dawid Bińkowski
 This product includes software developed by Dawid Bińkowski.
 Licensed under the Apache License, Version 2.0. See LICENSE.
 
-This repository distributes source code only. It does not distribute model
-weights, article text, or any corpus. The model named in MODEL_CARD.md is
+Model weights are not distributed here. The model named in MODEL_CARD.md is
 pulled by the operator from their own Ollama installation and carries its own
 licence, which this project neither grants nor restricts.
+
+
+Material published by others
+----------------------------
+
+Alongside the source code this repository carries material published by other
+people. It is here because without it nothing in MODEL_CARD.md can be checked
+by anyone:
+
+  eval/*.csv        Headlines and leads of Polish news articles, each with the
+                    URL it came from, annotated as the reference sets every
+                    measurement was taken against. Article bodies were never
+                    collected and are not here.
+
+  tests/fixtures/   Two responses saved on 18 August 2026 - an Interia RSS feed
+                    and a TV Republika listing page. They exist so that a parser
+                    broken by a redesign fails in CI rather than quietly a week
+                    later.
+
+This material is included for analysis and research, remains the property of the
+publishers named beside it, and is not offered for reuse as content. The
+Apache-2.0 grant above covers the source code and does not extend to it.
+
+Publishers who reserve text and data mining rights are excluded from it. See
+COMPLIANCE.md, which explains what that reservation is and where the project
+records it.
