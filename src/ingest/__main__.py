@@ -58,9 +58,10 @@ async def _run_pass(
     sources = await load_sources(connection_pool, names)
     if not sources:
         # Every source ships inactive (migration 007), so this is the state a fresh install
-        # is in rather than a fault. Saying only "no sources matched" would read as a bug
-        # in the very first command an operator runs.
-        logger.error(
+        # is in rather than a fault — which is why it is a warning. At ERROR the very first
+        # command an operator runs reports what looks like a broken install, and an
+        # unattended pass fills its log with red for behaving exactly as designed.
+        logger.warning(
             "no active sources matched %s. Nothing is collected until you enable a source: "
             "`make sources` lists what is configured and which publishers reserve "
             "text-and-data-mining rights, `make source-enable NAME='...'` turns one on. "
