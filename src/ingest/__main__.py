@@ -4,12 +4,12 @@
     make ingest ARGS="--dry-run"                # fetch and report, write nothing
     make ingest ARGS="--source 'TV Republika'"  # one portal, for debugging a selector
 
-Scheduling is the operating system's job, so this exits after one pass and cron decides
-when the next one happens. ``--interval`` exists for the compose service, which runs
-under ``restart: unless-stopped``: there, a process that exits is a restart loop
-hammering the portals, so it keeps its own timer instead.
-
-    0 */6 * * * cd /path/to/repo && make ingest
+One pass and exit, which is what a person running ``make ingest`` wants. Unattended, the
+schedule is the container's own: ``--interval`` makes this keep its timer and sleep between
+passes, because under ``restart: unless-stopped`` a process that exits is a restart loop
+hammering the portals. That is the whole scheduling story — there is no cron entry and no
+launchd agent anywhere in this system, deliberately, so there is nothing to install on a new
+host and nothing to forget to remove from an old one.
 """
 
 from __future__ import annotations

@@ -4,10 +4,11 @@
 #   docker compose --profile pipeline up -d   + ingest and analyzer, the unattended loop
 #   docker compose --profile scrape up -d     + crawl4ai, for JS-rendered or bot-walled portals
 #   docker compose --profile server up -d     + ollama, for the deployment server ONLY
-#   docker compose --profile full up -d       + api and web, which do not exist yet
+#   docker compose --profile full up -d       + api and web, the reader-facing product
 #
-# `pipeline` exists separately from `full` because `full` also starts api and web, whose
-# source is still to be written: they would sit in a restart loop.
+# `pipeline` exists separately from `full` so a machine can collect and analyse without
+# serving anything — which is what the deployment host did before the reader-facing half
+# existed, and still what a machine that only feeds the corpus wants.
 #
 # Ollama is deliberately absent from the default set. During local development it runs
 # natively on the host: Docker Desktop on macOS caps the VM's memory far below the host's
@@ -109,6 +110,16 @@ services:
     env_file: [.env, .env.docker]
     ports:
       - "127.0.0.1:8000:8000"
+    # `/health` deliberately does not touch the database — a check that fails on a slow
+    # query restarts a process that was working. It answers whether the process is serving,
+    # which is exactly what `web` needs to know before it starts proxying to it.
+    healthcheck:
+      test:
+        ["CMD-SHELL", "python -c \"import urllib.request as r; r.urlopen('http://127.0.0.1:8000/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     depends_on:
       postgres:
         condition: service_healthy
@@ -127,8 +138,12 @@ services:
     profiles: ["full"]
     ports:
       - "127.0.0.1:3000:3000"
+    # Waits for the API to answer, not merely to exist: Server Components read the feed on
+    # the first request, and a front end that starts first renders an error page to whoever
+    # happened to be looking.
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:

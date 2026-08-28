@@ -3,7 +3,7 @@
 Both endpoints read ``article_latest_analysis`` rather than ``analyses``, so neither
 repeats the rule about which of an article's analyses counts.
 
-Nothing here aggregates by publisher. The measured precision of a single finding is 39% on
+Nothing here aggregates by publisher. The measured precision of a single finding is 42% on
 material the prompt was never tuned against; a per-outlet count built from that is a claim
 about a named company carrying the error of every finding under it and no quote to check
 it against. The reader gets sentences, each with the fragment it refers to and a link to

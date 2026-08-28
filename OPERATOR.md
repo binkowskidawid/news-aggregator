@@ -134,8 +134,14 @@ If you enable them, **you are the data controller** for whatever your users stor
 
 What the code gives you: Argon2id password hashing, server-side sessions whose token is
 stored only as a SHA-256 digest, `httpOnly` + `SameSite=Lax` + `Secure` cookies by default,
-rate limiting on sign-in against two budgets (address and IP), and account deletion that
-cascades.
+rate limiting on sign-in per email address, and account deletion that cascades.
+
+A second budget, per client address, exists and is **off by default**. It has to be: the
+front end proxies `/api/*` to the API, so every request reaches the API from the `web`
+container and an address read off the connection names nobody. Counted against it, the
+budget would be one bucket shared by every reader — ten wrong passwords from anybody would
+answer 429 to everybody. Set `TRUST_PROXY_IP=1` only once a reverse proxy in front of this
+sets or appends `X-Forwarded-For` itself; see "Serving it" below.
 
 What it does not give you: password reset (there is no mail path), email verification, or any
 retention schedule beyond deletion on request. Subscriptions are a stored set of categories —
@@ -168,8 +174,33 @@ behaviour and it is also the first thing to check when it seems broken.
 ## Serving it
 
 `make dev` is the development loop — Postgres, migrations, API and front end in one terminal.
-It is not a deployment. The `full` compose profile declares `api` and `web`; the web image is
-not built here yet.
+It is not a deployment.
+
+The deployment is the `full` compose profile, which builds and runs both images:
+
+```bash
+docker compose --profile full up -d --build
+```
+
+Both bind to loopback only — `127.0.0.1:3000` for the front end, `127.0.0.1:8000` for the
+API. **Nothing in this repository terminates TLS or faces the internet**, and that is
+deliberate: the reverse proxy is the one part of a deployment that belongs to whoever owns
+the domain. Put one in front of port 3000, and give it three jobs:
+
+1. **Terminate TLS**, and leave `COOKIE_SECURE=1`. The session cookie is `Secure` by
+   default, and a browser silently discards it over plain HTTP — sign-in then appears to do
+   nothing at all.
+2. **Set `X-Forwarded-For` yourself** — `proxy_set_header X-Forwarded-For $remote_addr;` in
+   nginx, or the appending form. Whatever the caller sent must not survive. Only once this
+   holds may you set `TRUST_PROXY_IP=1`, which turns on the per-client half of the sign-in
+   rate limit. Without it, leave the setting at 0: an unverified header is a rate limit the
+   party being limited gets to write.
+3. **Rate-limit `/api/auth/*`.** The application limits sign-in per email address; nothing
+   in it limits registration, because no limit keyed on data the caller chooses would work.
+   `limit_req` on that path is the answer, and it belongs where the addresses are real.
+
+Do not publish port 8000. The API is reached through the front end's `/api/*` rewrite, which
+is what keeps the session cookie same-site, and it is the only path the front end uses.
 
 Measured cost of the analysis itself: a server without a GPU is enough — 21.4 s per article,
 500 articles in about three hours.

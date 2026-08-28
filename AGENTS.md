@@ -143,6 +143,13 @@ container abort on startup.
 7. **Enum values are the wire format.** `emotional_load`, `polityka`, and the rest are
    what the model emits and what the CHECK constraints accept. Never translate or rename
    them casually.
+8. **`request.client.host` is not the reader's address.** The front end proxies every
+   `/api/*` path to the API, so the connection the API sees comes from the `web` container
+   for every reader alike. Anything counted per client — the sign-in budget is the one that
+   exists — must go through `api.security.client_address`, which answers `None` unless
+   `TRUST_PROXY_IP` says a reverse proxy establishes the address. Counting against the
+   connection instead turns the budget into one shared bucket: ten wrong passwords from
+   anybody locked out everybody, which is how it was found.
 
 ## Engineering Rules
 

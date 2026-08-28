@@ -48,7 +48,7 @@ Full conditions, limitations, and what was never measured: **[MODEL_CARD.md](MOD
 - Python 3.14 and [uv](https://docs.astral.sh/uv/)
 - Docker (PostgreSQL 18 — `uuidv7()` is required)
 - [Ollama](https://ollama.com) running **natively on the host**, not in a container
-- Node 22+ and pnpm, for the front end
+- Node 24 and pnpm, for the front end — the version CI and the image both build against
 
 ```bash
 ollama pull gemma4:latest

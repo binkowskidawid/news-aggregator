@@ -44,6 +44,16 @@ Out of scope:
 Stated rather than hidden, and not to be reported as new:
 
 - **No password reset.** There is no mail path in this project at all.
+- **No per-client rate limit on the default deployment, and none at all on registration.**
+  The front end proxies `/api/*` to the API, so the connection the API sees belongs to the
+  `web` container for every reader. An address read off it identifies nobody, and counting
+  sign-in failures against it would be one budget shared by everybody — a lockout rather
+  than a limit. It is therefore off unless `TRUST_PROXY_IP=1` says a reverse proxy sets or
+  appends `X-Forwarded-For`; the per-address budget applies either way. Registration has no
+  budget of its own: keyed on the email it would let anybody lock a stranger out of signing
+  in, and keyed on a client address that is unknowable by default it would stop nothing.
+  What bounds its cost is the concurrency limit on hashing. Put a rate limit in your
+  reverse proxy.
 - **The front end's CSP allows inline scripts and styles.** Next inlines its own bootstrap
   into the document and Tailwind emits inline style attributes, so `'unsafe-inline'` stays in
   `script-src` and `style-src`. Removing the first means a per-request nonce threaded through
@@ -54,15 +64,22 @@ Stated rather than hidden, and not to be reported as new:
   materials.
 - **CSRF rests on `SameSite=Lax` and the absence of CORS**, both deliberate: the front end and
   the API are served from one origin through a rewrite, so no cross-origin request is
-  expected. There is no CSRF token. If you deploy the two on separate origins, this
-  assumption stops holding and you need one.
+  expected. There is no CSRF token. Two deployments break the assumption and need one:
+  serving the front end and the API on separate origins, and serving this beside anything
+  else on the same registrable domain — `Lax` counts a sibling subdomain as same-site, so
+  that neighbour's pages can post to this one with the session cookie attached.
 
 ## What the code does defend
 
 - Argon2id password hashing; session tokens stored only as SHA-256 digests
 - `httpOnly` + `SameSite=Lax` + `Secure` session cookies, `Secure` on unless explicitly
   disabled for local HTTP
-- Rate limiting on sign-in against two budgets, by address and by IP
+- Rate limiting on sign-in **per email address**, always. A second budget per client address
+  exists but is off unless `TRUST_PROXY_IP=1` states that a reverse proxy establishes that
+  address — see "Known gaps"
+- Password hashing runs off the event loop under a concurrency limit of four, so one sign-in
+  neither stalls every other request nor lets an unauthenticated endpoint reach the memory
+  of forty simultaneous Argon2 computations
 - Constant-work sign-in path — a missing account still hashes, so the response time does not
   disclose whether an address is registered
 - The operator panel behind an admin role, answering 404 rather than 403 — and the API's
