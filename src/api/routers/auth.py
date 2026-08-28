@@ -17,14 +17,16 @@ from api.security import (
     SESSION_TTL,
     burn_verification_time,
     clear_failures,
+    client_address,
     close_session,
     hash_password,
+    needs_rehash,
     open_session,
     record_failure,
     too_many_failures,
     verify_password,
 )
-from db import fetch_one
+from db import execute, fetch_one
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -72,7 +74,10 @@ async def register(
         row = await fetch_one(
             connection_pool,
             "INSERT INTO users (email, password_hash) VALUES (%s, %s) RETURNING id, email, role",
-            (str(credentials.email), hash_password(credentials.password.get_secret_value())),
+            (
+                str(credentials.email),
+                await hash_password(credentials.password.get_secret_value()),
+            ),
         )
     except UniqueViolation:
         # The address is already taken, and saying so is the honest answer: a sign-up form
@@ -98,10 +103,15 @@ async def login(
     settings: Config,
     response: Response,
 ) -> Account:
-    # Two budgets, not one. Per address so that a single account cannot be ground down, per
-    # client so that spraying one guess across a thousand addresses is limited too.
-    client = request.client.host if request.client else "unknown"
-    identifiers = [str(credentials.email).lower(), f"ip:{client}"]
+    # Per address always, so that a single account cannot be ground down. Per client only
+    # where the client can actually be told apart from the proxy in front of this service —
+    # otherwise every reader shares one budget and ten wrong passwords lock out the whole
+    # installation. `client_address` returns None unless the operator has said a reverse
+    # proxy sets the header; see TRUST_PROXY_IP in .env.example and OPERATOR.md.
+    identifiers = [str(credentials.email).lower()]
+    caller = client_address(request, trust_proxy=settings.trust_proxy_ip)
+    if caller is not None:
+        identifiers.append(f"ip:{caller}")
 
     if await too_many_failures(connection_pool, identifiers):
         raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "too many attempts; try again later")
@@ -115,13 +125,25 @@ async def login(
     # One message for both "no such account" and "wrong password", and one duration too.
     # Identical wording with different timing is still an enumeration oracle.
     if row is None:
-        burn_verification_time()
+        await burn_verification_time()
         await record_failure(connection_pool, identifiers)
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "wrong address or password")
 
-    if not verify_password(row["password_hash"], credentials.password.get_secret_value()):
+    password = credentials.password.get_secret_value()
+    if not await verify_password(row["password_hash"], password):
         await record_failure(connection_pool, identifiers)
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "wrong address or password")
+
+    # The one moment the plaintext is in hand and the account is known to be its owner's, so
+    # it is the only moment a cost raised since this hash was written can be applied. Without
+    # it, raising the Argon2 parameters would reach new accounts and leave every existing one
+    # at the old cost forever.
+    if needs_rehash(row["password_hash"]):
+        await execute(
+            connection_pool,
+            "UPDATE users SET password_hash = %s WHERE id = %s",
+            (await hash_password(password), row["id"]),
+        )
 
     await clear_failures(connection_pool, identifiers)
     token = await open_session(connection_pool, row["id"])

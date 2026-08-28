@@ -15,8 +15,9 @@ PYTHONPATH := src
 
 .PHONY: help up down logs ps migrate clean \
 	sync lint format typecheck test check install-hooks \
-	audit-sources audit-data smoke eval eval-report ingest analyze pipeline \
-	api sources source-enable source-disable reanalyze-plan reanalyze \
+	audit-sources audit-data smoke eval eval-cloud eval-report ingest analyze pipeline \
+	api admin sources source-enable source-disable reanalyze-plan reanalyze \
+	gold-candidates gold-check gold-load holdout-check holdout-load \
 	dev web web-check api-types
 
 help: ## Show available commands
@@ -101,7 +102,7 @@ dev: up migrate ## Everything a reader needs, in one terminal. Ctrl-C stops both
 	  echo "web/node_modules is missing — run: cd web && pnpm install"; exit 1; }
 	@echo ""
 	@echo "  front  http://localhost:3000     (redirects to /pl; /en for English)"
-	@echo "  api    http://localhost:8000/docs"
+	@echo "  api    http://localhost:8000     (/docs only with API_DOCS=1 — see .env.example)"
 	@echo ""
 	@trap 'kill 0' EXIT INT TERM; \
 	  uv run uvicorn api.main:app --app-dir src --reload & \
@@ -128,6 +129,15 @@ api-types: ## Regenerate web/lib/api-types.ts from the FastAPI schema
 
 # Every source ships inactive (migration 007). Switching one on is the operator's decision
 # and carries the operator's duties — see OPERATOR.md before enabling anything.
+#
+# Names and addresses reach SQL as psql variables and are written `:'name'`, which quotes
+# them as literals. Interpolating $(NAME) into the statement text would build SQL out of a
+# shell variable — harmless here, since whoever runs make already holds the database, but it
+# is the one pattern nobody should have to decide is harmless on a second reading.
+#
+# Piped in rather than passed to `psql -c`: -c hands the string to the server unparsed, so
+# `:'name'` arrives literally and the statement fails with a syntax error. Substitution only
+# happens on input psql itself reads.
 
 sources: ## List configured sources: which are active, which reserve TDM rights
 	@$(PSQL) -c "SELECT name, active, tdm_reserved, strategy, coalesce(rss_url, '-') AS feed \
@@ -135,11 +145,13 @@ sources: ## List configured sources: which are active, which reserve TDM rights
 
 source-enable: ## Start collecting from one source. Usage: make source-enable NAME='Interia'
 	@test -n "$(NAME)" || { echo "NAME is required, e.g. make source-enable NAME='Interia'"; exit 1; }
-	@$(PSQL) -c "UPDATE sources SET active = true WHERE name = '$(NAME)' RETURNING name, active, tdm_reserved"
+	@echo "UPDATE sources SET active = true WHERE name = :'name' RETURNING name, active, tdm_reserved;" \
+	  | $(PSQL) -v name="$(NAME)"
 
 source-disable: ## Stop collecting from one source. Usage: make source-disable NAME='Interia'
 	@test -n "$(NAME)" || { echo "NAME is required, e.g. make source-disable NAME='Interia'"; exit 1; }
-	@$(PSQL) -c "UPDATE sources SET active = false WHERE name = '$(NAME)' RETURNING name, active"
+	@echo "UPDATE sources SET active = false WHERE name = :'name' RETURNING name, active;" \
+	  | $(PSQL) -v name="$(NAME)"
 
 # The operator panel is behind the `admin` role and nothing in the application grants it —
 # deliberately, because a running service that can promote its own accounts is one bug away
@@ -147,7 +159,8 @@ source-disable: ## Stop collecting from one source. Usage: make source-disable N
 
 admin: ## Grant the operator panel to an existing account. Usage: make admin EMAIL='you@example.com'
 	@test -n "$(EMAIL)" || { echo "EMAIL is required, e.g. make admin EMAIL='you@example.com'"; exit 1; }
-	@$(PSQL) -c "UPDATE users SET role = 'admin' WHERE lower(email) = lower('$(EMAIL)') RETURNING email, role"
+	@echo "UPDATE users SET role = 'admin' WHERE lower(email) = lower(:'email') RETURNING email, role;" \
+	  | $(PSQL) -v email="$(EMAIL)"
 
 ingest: ## Fetch one pass from every active source. Usage: make ingest [ARGS="--dry-run"]
 	uv run python -m ingest $(ARGS)

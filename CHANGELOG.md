@@ -8,6 +8,35 @@ when no code moved.
 
 ## [Unreleased]
 
+### Fixed
+
+- **The sign-in rate limit no longer locks out every account at once.** The second budget was
+  counted against `request.client.host`, which behind the front end's `/api/*` rewrite is the
+  `web` container for every reader alike — so ten failed attempts from anybody answered 429
+  to everybody for fifteen minutes. The per-address budget is unchanged and always applies;
+  the per-client one is now off unless `TRUST_PROXY_IP=1` states that a reverse proxy
+  establishes the address, and then reads the rightmost `X-Forwarded-For` entry. See
+  [OPERATOR.md](OPERATOR.md) § Serving it.
+- **Password hashing no longer blocks the event loop.** Argon2id was called directly from
+  async handlers, so every sign-in stalled the whole process for the duration of a hash —
+  measured at 25 ms and 64 MiB per call. It now runs in a thread under a concurrency limit
+  of four, which also caps what an unauthenticated `/auth/register` can reach.
+- **A password hashed under older Argon2 parameters is now re-hashed on sign-in.**
+  `needs_rehash` existed, was documented as the reason raising the cost does not lock anyone
+  out, and was never called.
+- One session refresh at most every five minutes, rather than an `UPDATE` on `sessions` for
+  every authenticated request.
+- Corrected the precision figure in the feed router's own docstring: 42%, as everywhere else,
+  not 39%.
+- `make dev` no longer prints a `/docs` address that answers 404 unless `API_DOCS=1`.
+- `make source-enable`, `source-disable` and `admin` pass names and addresses as psql
+  variables instead of interpolating them into the statement text.
+
+### Changed
+
+- The `full` compose profile now waits for the API's health check before starting the front
+  end, and `CLAUDE.md` points at `AGENTS.md` instead of duplicating it.
+
 ## [0.1.0] — 2026-08-27
 
 First public release. Prompt `v1.1.3`, measured on 64 held-out articles: underline correct
@@ -39,8 +68,9 @@ conditions in [MODEL_CARD.md](MODEL_CARD.md).
 ### Security
 
 - Argon2id password hashing; session tokens stored only as SHA-256 digests.
-- Sign-in rate limited against two budgets, by address and by client address, on a
-  constant-work path that hashes even when no account exists.
+- Sign-in rate limited by email address, on a constant-work path that hashes even when no
+  account exists. A second budget per client address ships off — see Unreleased above and
+  [SECURITY.md](SECURITY.md).
 - The operator panel answers 404 rather than 403, and the API's own documentation routes
   (`/docs`, `/redoc`, `/openapi.json`) are unmounted unless `API_DOCS=1` — the front end
   proxies `/api/*` verbatim and the schema lists the operator paths.

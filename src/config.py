@@ -29,6 +29,7 @@ class Settings:
     openrouter_model: str | None
     contact_email: str
     cookie_secure: bool
+    trust_proxy_ip: bool
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -48,6 +49,12 @@ class Settings:
             # rather than a misconfigured deployment silently sending session cookies in
             # the clear. Only local development should ever set this to 0.
             cookie_secure=os.environ.get("COOKIE_SECURE", "1") != "0",
+            # Off by default, and the default is the safe one this time round: the front
+            # end proxies /api/* to this service, so every request arrives from one
+            # container and an address read off the connection identifies nobody. Counting
+            # failed sign-ins against it would be one shared budget — an outage, not a
+            # limit. See `api.security.client_address`.
+            trust_proxy_ip=os.environ.get("TRUST_PROXY_IP", "0") == "1",
         )
 
     @staticmethod

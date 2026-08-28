@@ -23,5 +23,10 @@ eval/runs/
 .idea/
 .vscode/
 
+# Per-machine agent settings: tool permissions and local paths, useful to nobody else.
+# Listed here rather than left to a contributor's global ignore file, which is the only
+# thing that was keeping it out of this repository.
+.claude/settings.local.json
+
 # Screenshots and snapshots left by the Playwright MCP browser
 .playwright-mcp/
