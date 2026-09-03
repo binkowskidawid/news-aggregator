@@ -1,13 +1,13 @@
 # pnpm is installed rather than enabled through corepack: corepack's future in the Node
 # images is not something this build should depend on, and the version is pinned to the one
 # that produced pnpm-lock.yaml.
-FROM node:24-slim AS deps
+FROM node:26-slim AS deps
 WORKDIR /app
 RUN npm install --global pnpm@11.21.0
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
-FROM node:24-slim AS builder
+FROM node:26-slim AS builder
 WORKDIR /app
 RUN npm install --global pnpm@11.21.0
 COPY --from=deps /app/node_modules ./node_modules
@@ -24,7 +24,7 @@ ENV API_URL=${API_URL}
 ENV NEXT_STANDALONE=1
 RUN pnpm build
 
-FROM node:24-slim
+FROM node:26-slim
 # Unprivileged, like the API container. This one renders text fetched from third-party sites.
 RUN useradd --create-home --uid 10001 app
 WORKDIR /app
